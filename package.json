@@ -1,0 +1,14 @@
+{
+  "name": "kennel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "kennel — the agentMonitor PLACE: the agent's own desktop. Owns the walls (Xvnc :99, portrait 1440x2560), the bed (openbox+tint2 WM), and the flap (VNC :5900 + websockify :6080 door). Things that live IN the kennel: waterbowl (browser), coat (fur), fetch (pages).",
+  "license": "MIT",
+  "engines": { "bun": ">=1.4.3" },
+  "scripts": {
+    "status": "bun run bin/status.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": ["agentMonitor", "Xvnc", "kennel", "kelpie"]
+}
