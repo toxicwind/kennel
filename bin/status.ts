@@ -20,8 +20,17 @@ async function check(name: string, fn: () => Promise<boolean>): Promise<Record<s
 }
 
 const tcp = (port: number) => async () => {
-  const r = await fetch(`http://127.0.0.1:${port}/`, { signal: AbortSignal.timeout(2500) }).catch(() => null);
-  return r !== null;
+  // RAW TCP connect (not HTTP): Xvnc speaks VNC/RFB, not HTTP — an http fetch
+  // false-negatives a perfectly healthy wall.
+  const t0 = Date.now();
+  try {
+    const conn = Bun.connect({ hostname: "127.0.0.1", port, socket: { data() {}, end() {}, error() {} } });
+    await Promise.race([conn, new Promise((_, rej) => setTimeout(() => rej(new Error("tcp timeout")), 2500))]);
+    void Date.now() - t0;
+    return true;
+  } catch {
+    return false;
+  }
 };
 const cdp = async () => {
   const r = await fetch("http://127.0.0.1:25234/json/version", { signal: AbortSignal.timeout(2500) }).catch(() => null);
